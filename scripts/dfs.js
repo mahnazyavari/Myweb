@@ -3,17 +3,23 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const app = express();
-app.use(cors()); // Allow frontend to connect
+
+// Allow frontend (AEM) to send requests to backend
+app.use(cors({ origin: "*" }));
 app.use(bodyParser.json());
 
-let users = []; // Temporary storage
+let users = []; // Tempogggggggggggggggggrary storage
 
-// Home route (Fixes "Cannot GET /" error)
 app.get("/", (req, res) => {
   res.send("Welcome to MyWeb API! Use /register to create an account.");
 });
 
-// Handle registration
+// GET endpoint for /register to avoid "Cannot GET /register" error
+app.get("/register", (req, res) => {
+  res.send("This is the registration endpoint. Please send a POST request to register.");
+});
+
+// Handle registration requests from frontend
 app.post("/register", (req, res) => {
   const { username, email, password } = req.body;
 
@@ -25,6 +31,4 @@ app.post("/register", (req, res) => {
   res.json({ message: "Registration successful!" });
 });
 
-// Start the server on port 3000
-const PORT = 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(3000, () => console.log("Server running on port 3000"));
